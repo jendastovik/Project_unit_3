@@ -1,0 +1,548 @@
+#:kivy 1.0.9
+
+ScreenManager:
+    id: screen_manager
+    HomeScreen:
+        id: home_screen
+        name: 'HomeScreen'
+    TableScreen:
+        id: table_screen
+        name: 'TableScreen'
+    AddCustomerScreen:
+        id: add_customer_screen
+        name: 'AddCustomerScreen'
+    LoginScreen:
+        id: login_screen
+        name: 'LoginScreen'
+    RegistrationScreen:
+        id: registration_screen
+        name: 'RegistrationScreen'
+    CreateItemScreen:
+        id: create_item_screen
+        name: 'CreateItemScreen'
+    ViewOrderScreen:
+        id: view_order_screen
+        name: 'ViewOrderScreen'
+    ViewPartiesScreen:
+        id: view_parties_screen
+        name: 'ViewPartiesScreen'
+    ImageScreen:
+        id: image_screen
+        name: 'ImageScreen'
+
+
+<TableScreen>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/frisbees.jpg'
+    MDLabel:
+        text: "Transactions"
+        font_style: "H4"
+        pos_hint: {'center_x': 0.5, 'top': 0.9}
+        halign: "center"
+        size_hint: (0.8, 0.08)
+
+    MDLabel:
+        text: "New Record"
+        font_style: "H4"
+        pos_hint: {'center_x': 0.5, 'top': 0.3}
+        halign: "center"
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        size_hint: (.8, .08)
+        pos_hint: {'center_x': 0.5, 'top': 0.2}
+        spacing: 10
+        MDRaisedButton:
+            text: "Delete selected records"
+            on_release: root.delete_selected()
+            size_hint_x: 0.24
+            
+        MDRaisedButton:
+            text: "Delete all records"
+            on_release: root.delete_all()
+            size_hint_x: 0.24
+        MDRaisedButton:
+            text: "Back to home"
+            size_hint_x: 0.24
+            on_release: root.parent.current = "HomeScreen"
+        MDRaisedButton:
+            text: "Summary"
+            size_hint_x: 0.24
+            on_release: root.summary()
+            
+    MDBoxLayout:
+        orientation: 'horizontal'
+        size_hint: (.8, .08)
+        pos_hint: {'center_x': 0.5, 'top': 0.1}  
+        spacing: 10
+        md_bg_color: "white"
+        radius: [10, 10, 10, 10]
+             
+        MDDropDownItem:
+            id: sender_id
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            size_hint: None, None
+            size: 300, 55
+            text: 'select sender'
+            on_release: root.open_menu(self)
+            
+        MDDropDownItem:
+            id: receiver_id
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            size_hint: None, None
+            size: 300, 55
+            text: 'select receiver'
+            on_release: root.open_menu(self)
+        MDTextField:
+            id: amount
+            hint_text: "Amount"
+            size_hint_x: 0.2
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            filter: "int"
+        MDRaisedButton:
+            text: "Save new record"
+            size_hint_y: 1
+            on_release: root.save()
+
+
+<LoginScreen>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/frisbees.jpg'
+    MDBoxLayout:
+        orientation: "vertical"
+
+        
+        MDLabel:
+            text: 'Flight Haven: The Ultimate Frisbee Emporium'
+            size_hint_y:.25
+            bold: True
+            halign: "center"
+            font_size: "80px"
+            pos_hint: {"center_x":.5,"center_y":.5}
+        MDCard:
+            size_hint: .7,.7
+            pos_hint: {"center_x":.5,"center_y":.5}
+            orientation: "vertical"
+            border_radius: 40
+            radius: [40]
+            MDBoxLayout:
+                orientation: "vertical"
+                pos_hint: {"center_x":.5,"center_y":.5}
+                MDLabel:
+                    text: "Log in to your account"
+                    halign: "left"
+                    text_color: "#F08DA9"
+                    bold: True
+                    size_hint_y:.2
+                    font_size: "50px"
+                    pos_hint: {"center_x":.55, "center_y":.5}
+                MDTextField:
+                    id:uname
+                    icon_left: "email"
+                    hint_text: "Enter username"
+                    size_hint: .7, .15
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDTextField:
+                    id: passwd
+                    icon_left: "key-variant"
+                    hint_text: "Enter password"
+                    password: True
+                    size_hint: .7,.15
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDLabel:
+                    text: ""
+                    size_hint_y:.15
+                MDFlatButton:
+                    text: "Sign in"
+                    md_bg_color:"#F08DA9"
+                    pos_hint: {"center_x":.5, "center_y":.2}
+                    size_hint: .3,.1
+                    on_press:
+                        root.try_login()
+                MDTextButton:
+                    text: "Don't have an account? Sign up here"
+                    custom_color: "#F08DA9"
+                    size_hint: 1, .25
+                    halign: "center"
+                    pos_hint: {"center_x":0.5,"center_y":.5}
+                    on_press: root.register_btn()
+
+<RegistrationScreen>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/frisbees.jpg'
+    MDBoxLayout:
+        orientation: "vertical"
+        radius: [10, 10, 10, 10]
+        MDCard:
+            size_hint: .7,.8
+            pos_hint: {"center_x":.5,"center_y":.5}
+            orientation: "vertical"
+            border_radius: 40
+            radius: [40]
+            md_bg_color: "white"
+            MDBoxLayout:
+                orientation: "vertical"
+                pos_hint: {"center_x":.5,"center_y":.5}
+                MDLabel:
+                    text: "Register new account"
+                    halign: "left"
+                    text_color: "#F08DA9"
+                    bold: True
+                    size_hint_y:.15
+                    font_size: "50px"
+                    pos_hint: {"center_x":.55, "center_y":.5}
+                MDTextField:
+                    id:uname
+                    hint_text: "Enter username"
+                    size_hint: .7, .1
+                    hint_font_size: "10px"
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDTextField:
+                    id: email
+                    hint_text: "Enter email"
+                    hint_font_size: "10px"
+                    size_hint: .7,.1
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDTextField:
+                    id:pass1
+                    hint_text: "Enter password"
+                    size_hint: .7, .1
+                    hint_font_size: "10px"
+                    password: True
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDTextField:
+                    id: pass2
+                    hint_text: "Confirm password"
+                    helper_text: "Password must be at least 8 characters long"
+                    helper_text_mode: "on_error"
+                    password: True
+                    size_hint: .7,.1
+                    hint_font_size: "10px"
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDTextField:
+                    id: code
+                    hint_text: "Enter code for creating new account"
+                    size_hint: .7, .1
+                    hint_font_size: "10px"
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDLabel:
+                    text: ""
+                    size_hint_y: .05
+                MDFlatButton:
+                    text: "Register"
+                    md_bg_color:"#F08DA9"
+                    pos_hint: {"center_x":.5, "center_y":.2}
+                    size_hint: .3,.05
+                    on_press: root.try_register()
+                MDTextButton:
+                    text: "Already have an account? Log in here"
+                    custom_color: "#F08DA9"
+                    size_hint: 1, .1
+                    halign: "center"
+                    pos_hint: {"center_x":0.5,"center_y":.5}
+                    on_press: root.login_btn()
+
+<HomeScreen>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/frisbees.jpg'
+    MDBoxLayout:
+        orientation: "vertical"
+
+        MDLabel:
+            text: 'Flight Haven: The Ultimate Frisbee Emporium'
+            size_hint_y:.25
+            bold: True
+            halign: "center"
+            font_size: "80px"
+            pos_hint: {"center_x":.5,"center_y":.5}
+        MDBoxLayout:
+            orientation: "vertical"
+            pos_hint: {"center_x":.5,"center_y":.5}
+            size_hint: .8,.3
+            spacing: 20
+            MDRaisedButton:
+                text: "Register new bussiness partner"
+                size_hint: .5,.1
+                pos_hint: {"center_x":.5,"center_y":.5}
+                on_press: root.parent.current = "AddCustomerScreen"
+            MDRaisedButton:
+                text: "View and add transactions"
+                size_hint: .5,.1
+                pos_hint: {"center_x":.5,"center_y":.5}
+                on_press: root.parent.current = "TableScreen"
+            MDRaisedButton:
+                text: "Create new item"
+                size_hint: .5,.1
+                pos_hint: {"center_x":.5,"center_y":.5}
+                on_press: root.parent.current = "CreateItemScreen"
+            MDRaisedButton:
+                text: "View order summary"
+                size_hint: .5,.1
+                pos_hint: {"center_x":.5,"center_y":.5}
+                on_press: root.parent.current = "ViewOrderScreen"
+            MDRaisedButton:
+                text: "View business partners"
+                size_hint: .5,.1
+                pos_hint: {"center_x":.5,"center_y":.5}
+                on_press: root.parent.current = "ViewPartiesScreen"
+            MDRaisedButton:
+                text: "Log out"
+                size_hint: .5,.1
+                pos_hint: {"center_x":.5,"center_y":.5}
+                on_press: root.parent.current = "LoginScreen"
+            MDLabel:
+                text: ""
+                size_hint_y: .1
+
+                
+
+<AddCustomerScreen>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/frisbees.jpg'
+    MDBoxLayout:
+        orientation: "vertical"
+        MDLabel:
+            text: 'Flight Haven: The Ultimate Frisbee Emporium'
+            size_hint_y:.15
+            bold: True
+            halign: "center"
+            font_size: "80px"
+            pos_hint: {"center_x":.5,"center_y":.5}
+        MDCard:
+            size_hint: .7,.6
+            pos_hint: {"center_x":.5,"center_y":.5}
+            orientation: "vertical"
+            border_radius: 40
+            radius: [40]
+            MDBoxLayout:
+                orientation: "vertical"
+                pos_hint: {"center_x":.5,"center_y":.5}
+                MDLabel:
+                    text: "Register new bussiness partner"
+                    halign: "left"
+                    text_color: "#F08DA9"
+                    bold: True
+                    size_hint_y:.15
+                    font_size: "50px"
+                    pos_hint: {"center_x":.55, "center_y":.5}
+                MDTextField:
+                    id:name
+                    hint_text: "Enter first name"
+                    size_hint: .7, .1
+                    hint_font_size: "12px"
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDTextField:
+                    id: surname
+                    hint_text: "Enter last name"
+                    hint_font_size: "10px"
+                    size_hint: .7,.1
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDTextField:
+                    id:email
+                    hint_text: "Enter email"
+                    size_hint: .7, .1
+                    hint_font_size: "10px"
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDFlatButton:
+                    text: "Register"
+                    md_bg_color:"#F08DA9"
+                    pos_hint: {"center_x":.5, "center_y":.2}
+                    size_hint: .3,.05
+                    on_press: root.create_customer()
+                MDTextButton:
+                    text: "Back to home"
+                    custom_color: "#F08DA9"
+                    size_hint: 1, .1
+                    halign: "center"
+                    on_press: root.parent.current = "HomeScreen"
+
+<CreateItemScreen>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/frisbees.jpg'
+    MDBoxLayout:
+        orientation: "vertical"
+        MDLabel:
+            text: 'Flight Haven: The Ultimate Frisbee Emporium'
+            size_hint_y:.15
+            bold: True
+            halign: "center"
+            font_size: "80px"
+            pos_hint: {"center_x":.5,"center_y":.5}
+        MDCard:
+            size_hint: .7,.6
+            pos_hint: {"center_x":.5,"center_y":.5}
+            orientation: "vertical"
+            border_radius: 40
+            radius: [40]
+            MDBoxLayout:
+                orientation: "vertical"
+                pos_hint: {"center_x":.5,"center_y":.5}
+                MDLabel:
+                    text: "Create new item"
+                    halign: "left"
+                    text_color: "#F08DA9"
+                    bold: True
+                    size_hint_y:.15
+                    font_size: "50px"
+                    pos_hint: {"center_x":.55, "center_y":.5}
+                MDDropDownItem:
+                    id: customer_id
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: None, None
+                    size: 300, 55
+                    text: 'select customer'
+                    on_release: root.open_menu(self)
+                MDDropDownItem:
+                    id: type
+                    pos_hint: {'center_x': .5, 'center_y': .5}
+                    size_hint: None, None
+                    size: 300, 55
+                    text: 'select type'
+                    on_release: root.open_shape_menu(self)
+                MDTextField:
+                    id: disc_color
+                    hint_text: "Enter item color"
+                    size_hint: .7, .1
+                    hint_font_size: "12px"
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                    on_text: root.update_color()
+                MDLabel:
+                    id: color
+                    text: ""
+                    size_hint: .6, .01
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDTextField:
+                    id: quantity
+                    hint_text: "Enter quantity"
+                    size_hint: .7, .1
+                    hint_font_size: "12px"
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                    on_text: self.text = str(max(0, min(100, int(self.text or 0))))
+                    input_filter:"int"
+
+                MDTextField:
+                    id: zip
+                    hint_text: "Enter region for image (leave empty if not applicable)"
+                    size_hint: .7, .1
+                    hint_font_size: "12px"
+                    pos_hint: {"center_x":.5,"center_y":.5}
+                MDFlatButton:
+                    text: "Create"
+                    md_bg_color:"#F08DA9"
+                    pos_hint: {"center_x":.5, "center_y":.2}
+                    size_hint: .3,.05
+                    on_press: root.create_item()                
+                MDTextButton:
+                    text: "Back to home"
+                    halign: "center"
+                    pos_hint: {"center_x":0.5,"center_y":.5}
+                    custom_color: "#F08DA9"
+                    size_hint: 1, .1
+                    on_press: root.parent.current = "HomeScreen"
+
+<ImageScreen>:
+    MDBoxLayout:
+        orientation: "vertical"
+        spacing: 10
+        MDLabel:
+            text: 'Image that will be placed on your frisbee!'
+            size_hint_y:.15
+            bold: True
+            halign: "center"
+            font_size: "50px"
+            pos_hint: {"center_x":.5,"center_y":.5}
+        AsyncImage:
+            id: image
+            source: 'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg'
+        MDTextButton:
+            text: "Back to home"
+            custom_color: "#F08DA9"
+            size_hint: 1, .1
+            halign: "center"
+            pos_hint: {"center_x":0.5,"center_y":.5}
+            on_press: root.parent.current = "HomeScreen"
+
+<ViewOrderScreen>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/frisbees.jpg'
+    MDLabel:
+        text: "Order Summary"
+        font_style: "H4"
+        pos_hint: {'center_x': 0.5, 'top': 0.9}
+        halign: "center"
+        size_hint: (0.8, 0.08)
+
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        size_hint: (.8, .08)
+        pos_hint: {'center_x': 0.5, 'top': 0.2}
+        spacing: 10
+        MDRaisedButton:
+            text: "Delete selected records"
+            on_release: root.delete_selected()
+            size_hint_x: 0.3
+            
+        MDRaisedButton:
+            text: "Delete all records"
+            on_release: root.delete_all()
+            size_hint_x: 0.3
+        MDRaisedButton:
+            text: "Back to home"
+            size_hint_x: 0.3
+            on_release: root.parent.current = "HomeScreen"
+
+<ViewPartiesScreen>:
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'assets/frisbees.jpg'
+    MDLabel:
+        text: "Business Partners"
+        font_style: "H4"
+        pos_hint: {'center_x': 0.5, 'top': 0.9}
+        halign: "center"
+        size_hint: (0.8, 0.08)
+
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        size_hint: (.8, .08)
+        pos_hint: {'center_x': 0.5, 'top': 0.2}
+        spacing: 10
+        MDRaisedButton:
+            text: "Delete selected records"
+            on_release: root.delete_selected()
+            size_hint_x: 0.3
+            
+        MDRaisedButton:
+            text: "Delete all records"
+            on_release: root.delete_all()
+            size_hint_x: 0.3
+        MDRaisedButton:
+            text: "Back to home"
+            size_hint_x: 0.3
+            on_release: root.parent.current = "HomeScreen"
+            
