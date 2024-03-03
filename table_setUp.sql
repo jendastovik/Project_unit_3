@@ -25,7 +25,8 @@ CREATE TABLE IF NOT EXISTS employees (
   id INTEGER PRIMARY KEY,
   username TEXT,
   password TEXT,
-  email TEXT
+  email TEXT,
+  last_login TEXT DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS discs (

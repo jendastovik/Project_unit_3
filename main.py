@@ -109,6 +109,8 @@ class LoginScreen(MDScreen):
         user = main.x.search(f"SELECT * FROM employees WHERE username='{uname}' AND password='{passwd}'")
 
         if user:
+            print(f"Last login is: {user[4]}")
+            self.manager.get_screen("HomeScreen").ids.log.text = f"Last login is: {user[4]}"
             self.parent.current = "HomeScreen"
             main.employee = user[0]
         else:
@@ -165,9 +167,6 @@ class AddCustomerScreen(MDScreen):
         email = self.ids.email.text
         main.x.insert(f"""INSERT INTO parties (first_name, last_name, email) VALUES ('{first_name}', '{last_name}', '{email}')""")
 
-class HomeScreen(MDScreen):
-    def build(self):
-        pass
 
 class CreateItemScreen(MDScreen):
     def __init__(self, *args, **kwargs):
@@ -249,12 +248,14 @@ class ImageScreen(MDScreen):
         super().__init__(*args, **kwargs)
 
     def on_pre_enter(self, *args):
+        print(main.link)
         self.ids.image.source = main.link
         
-
 class HomeScreen(MDScreen):
     def logout(self):
         self.parent.current = "LoginScreen"
+        main.x.run_query(f"UPDATE employees SET last_login=CURRENT_TIMESTAMP WHERE id={main.employee}")
+
     
 class ViewOrderScreen(MDScreen):
     def __init__(self, *args, **kwargs):

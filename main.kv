@@ -259,10 +259,17 @@ ScreenManager:
             source: 'assets/frisbees.jpg'
     MDBoxLayout:
         orientation: "vertical"
-
+        MDLabel:
+            id: log
+            size_hint_y:.05
+            font_size: "20px"
+            bold: True
+            halign: "center"
+            pos_hint: {"center_x":.5,"center_y":.5}
+            text: "Last login: " 
         MDLabel:
             text: 'Flight Haven: The Ultimate Frisbee Emporium'
-            size_hint_y:.25
+            size_hint_y:.15
             bold: True
             halign: "center"
             font_size: "80px"
@@ -301,7 +308,7 @@ ScreenManager:
                 text: "Log out"
                 size_hint: .5,.1
                 pos_hint: {"center_x":.5,"center_y":.5}
-                on_press: root.parent.current = "LoginScreen"
+                on_press: root.logout()
             MDLabel:
                 text: ""
                 size_hint_y: .1
@@ -472,6 +479,7 @@ ScreenManager:
         AsyncImage:
             id: image
             source: 'https://img.freepik.com/free-photo/painting-mountain-lake-with-mountain-background_188544-9126.jpg'
+            
         MDTextButton:
             text: "Back to home"
             custom_color: "#F08DA9"
