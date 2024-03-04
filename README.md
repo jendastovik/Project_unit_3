@@ -24,8 +24,16 @@ Lastly, the preference for SQLite as the designated data storage solution, as op
 [^10]: GfG. “Difference between MySQL and SQLite.” GeeksforGeeks, GeeksforGeeks, 7 May 2020, www.geeksforgeeks.org/difference-between-mysql-and-sqlite/. Accessed 4 Mar. 2024.
 
 ## Design Statement
+I will design a graphical user interface application. This application will be run locally on a computer and will allow users to do all mentioned tasks. All the data will be stored in also locally run database.
 
 ## Success Criteria
+1. Solution provides a way for the user of the software to track the inventory of materials
+2. Solution provides a way for the user to create an item sold by the company from the materials
+3. Solution provides a way to track orders and keep track of the budget
+4. Solution allows the user to sign in with a password and username and create new accounts for their employees
+5. Solution informs the user of the time and date of the last log-in
+6. Solution enables the user to create new distributors and customers, who can gather points based on which they get discounts
+7. While creating an item, Solution allows to add an image generated based on the name of the region provided
 
 # Criteria B: Design
 ## System Diagram
