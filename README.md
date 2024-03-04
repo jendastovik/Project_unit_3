@@ -43,7 +43,7 @@ I will design a graphical user interface application. This application will be r
 ## UML Diagram
 
 ## Record of Tasks
-| Task No. | Planned Action                                               | Planned Outcome                                                                                 | Time estimate | Target completion date | Criteria |
+| Task No. | Planned Action                                               | Planned Outcome                                                                                 | Time estimate (min) | Target completion date | Criteria |
 |----------|--------------------------------------------------------------|-------------------------------------------------------------------------------------------------|---------------|------------------------|----------|
 | 1 | Research on the best way to create a GUI application | A clear understanding of the best way to create a GUI application | 30 | 1/15/2024 | A |
 | 2 | Research on the best way to create a database | A clear understanding of the best way to create a database | 60 | 1/16/2024 | A |
@@ -76,10 +76,35 @@ I will design a graphical user interface application. This application will be r
 
 
 ## Test Plan
+| Test No. | Type of Test                                                            | Procedure                                                                                                    | Expected Outcome                                                                              | Date   |
+|----------|-------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------|--------|
+| 1        | Database connection test                                                | Run the application and check if the database is connected                                                    | The application runs without errors and the database is connected                         | 2/12/24 |
 
 # Criteria C: Development
 ## Existing Tools
+| Software/Development Tool |
+|---------------------------|
+| Python                    |
+| VS Code                   |
+| KivyMD                    |
+| SQLite                    |
+
+
+| Libraries  |
+|------------|
+| Kivy       |
+| KivyMD     |
+| Requests   |
+| Json       |
+
 ## List Of Techniques Used
+1. Functions (To have control of every action and not repeating the same for different parts of the code)
+2. While Loops (To make sure that the sensor was recording data)
+3. If else conditions (To send the data to the correct csv file and to the correct sensor in the server)
+4. Classes (To have a clear structure of the code and to make it easier to read and understand)
+5. Databases (To store the data and to make it easier to access it)
+6. GUI (To make the application user-friendly and easy to use)
+7. API (To get the data from the server and to send the data to the server)
 
 ## Development
 
