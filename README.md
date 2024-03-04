@@ -43,6 +43,38 @@ I will design a graphical user interface application. This application will be r
 ## UML Diagram
 
 ## Record of Tasks
+| Task No. | Planned Action                                               | Planned Outcome                                                                                 | Time estimate | Target completion date | Criteria |
+|----------|--------------------------------------------------------------|-------------------------------------------------------------------------------------------------|---------------|------------------------|----------|
+| 1 | Research on the best way to create a GUI application | A clear understanding of the best way to create a GUI application | 30 | 1/15/2024 | A |
+| 2 | Research on the best way to create a database | A clear understanding of the best way to create a database | 60 | 1/16/2024 | A |
+| 3 | Interviewing the client | A clear understanding of the problem and the requirements of the client | 90 | 1/17/2024 | A |
+| 4 | Problem definition | Write a clear problem definition | 30 | 1/18/2024 | A |
+| 5 | Proposed solution | Write a clear proposed solution | 60 | 1/19/2024 | A |
+| 6 | Design statement | Write a clear design statement | 90 | 1/20/2024 | A |
+| 7 | Success criteria | Write a clear success criteria | 30 | 1/21/2024 | A |
+| 8 | Create a wireframe | A clear understanding of the structure of the final application | 60 | 1/22/2024 | B |
+| 9 | Create ER diagram | A clear understanding of the structure of the database needed | 90 | 1/23/2024 | B |
+| 10 | Create UML diagram | A clear understanding of the classes needed for the final application | 30 | 1/24/2024 | B |
+| 11 | Create a system diagram | A clear understanding of the structure and deployment of the final application | 60 | 1/25/2024 | B |
+| 12 | Set up the database | A database that is ready to be used | 90 | 1/26/2024 | C |
+| 13 | Set up the GUI | Kivy and python files connected and ready to be used | 30 | 1/27/2024 | C |
+| 14 | Create a login screen | A screen that allows the user to log in | 60 | 1/28/2024 | C |
+| 15 | Create a registration screen | A screen that allows the user to create a new account | 90 | 1/29/2024 | C |
+| 16 | Create a home screen | A screen that allows the user to navigate through the application | 30 | 1/30/2024 | C |
+| 17 | Create a transaction screen | A screen that allows the user to create a new transaction and view and delete old ones | 60 | 1/31/2024 | C |
+| 18 | Create an add customer screen | A screen that allows the user to add a new business partner | 90 | 2/1/2024 | C |
+| 19 | Create a create item screen | A screen that allows the user to create a new item | 30 | 2/2/2024 | C |
+| 20 | Create get image function | A function that allows the user to get an image based on the name of the region | 60 | 2/3/2024 | C |
+| 21 | Create an image screen | A screen that allows the user to see the generated image to be printed on the item | 90 | 2/4/2024 | C |
+| 22 | Create view orders screen | A screen that allows the user to view and delete all the orders | 30 | 2/5/2024 | C |
+| 23 | Create a view parties screen | A screen that allows the user to view and delete all the customers and distributors | 60 | 2/6/2024 | C |
+| 24 | Last log in function | Show the time and date of the last log in on the home screen after log in | 90 | 2/7/2024 | C |
+| 25 | Password registration | Add a requirement for a password when creating a new account | 30 | 2/8/2024 | C |
+| 26 | Distributor and customer points | Add a point system for the customers and distributors | 60 | 2/9/2024 | C |
+| 27 | Budget tracking | Add a way to view the balance on the create transaction screen | 90 | 2/10/2024 | C |
+| 28 | Documentation | A clear and well-documented function, classes of the project | 30 | 2/11/2024 | B |
+
+
 ## Test Plan
 
 # Criteria C: Development
