@@ -36,7 +36,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'assets/frisbees.jpg'
+            source: 'assets/frisbees.png'
     MDLabel:
         text: "Transactions"
         font_style: "H4"
@@ -113,7 +113,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'assets/frisbees.jpg'
+            source: 'assets/frisbees.png'
     MDBoxLayout:
         orientation: "vertical"
 
@@ -178,7 +178,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'assets/frisbees.jpg'
+            source: 'assets/frisbees.png'
     MDBoxLayout:
         orientation: "vertical"
         radius: [10, 10, 10, 10]
@@ -256,7 +256,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'assets/frisbees.jpg'
+            source: 'assets/frisbees.png'
     MDBoxLayout:
         orientation: "vertical"
         MDLabel:
@@ -269,7 +269,7 @@ ScreenManager:
             text: "Last login: " 
         MDLabel:
             text: 'Flight Haven: The Ultimate Frisbee Emporium'
-            size_hint_y:.15
+            size_hint_y:.1
             bold: True
             halign: "center"
             font_size: "80px"
@@ -284,11 +284,19 @@ ScreenManager:
                 size_hint: .5,.1
                 pos_hint: {"center_x":.5,"center_y":.5}
                 on_press: root.parent.current = "AddCustomerScreen"
+                md_bg_color: "green"
+            MDRaisedButton:
+                text: "View business partners"
+                size_hint: .5,.1
+                pos_hint: {"center_x":.5,"center_y":.5}
+                on_press: root.parent.current = "ViewPartiesScreen"
+                md_bg_color: "green"
             MDRaisedButton:
                 text: "View and add transactions"
                 size_hint: .5,.1
                 pos_hint: {"center_x":.5,"center_y":.5}
                 on_press: root.parent.current = "TableScreen"
+                md_bg_color: "brown"
             MDRaisedButton:
                 text: "Create new item"
                 size_hint: .5,.1
@@ -299,16 +307,13 @@ ScreenManager:
                 size_hint: .5,.1
                 pos_hint: {"center_x":.5,"center_y":.5}
                 on_press: root.parent.current = "ViewOrderScreen"
-            MDRaisedButton:
-                text: "View business partners"
-                size_hint: .5,.1
-                pos_hint: {"center_x":.5,"center_y":.5}
-                on_press: root.parent.current = "ViewPartiesScreen"
+
             MDRaisedButton:
                 text: "Log out"
                 size_hint: .5,.1
                 pos_hint: {"center_x":.5,"center_y":.5}
                 on_press: root.logout()
+                md_bg_color: "red"
             MDLabel:
                 text: ""
                 size_hint_y: .1
@@ -320,7 +325,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'assets/frisbees.jpg'
+            source: 'assets/frisbees.png'
     MDBoxLayout:
         orientation: "vertical"
         MDLabel:
@@ -383,7 +388,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'assets/frisbees.jpg'
+            source: 'assets/frisbees.png'
     MDBoxLayout:
         orientation: "vertical"
         MDLabel:
@@ -493,7 +498,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'assets/frisbees.jpg'
+            source: 'assets/frisbees.png'
     MDLabel:
         text: "Order Summary"
         font_style: "H4"
@@ -526,7 +531,7 @@ ScreenManager:
         Rectangle:
             pos: self.pos
             size: self.size
-            source: 'assets/frisbees.jpg'
+            source: 'assets/frisbees.png'
     MDLabel:
         text: "Business Partners"
         font_style: "H4"
