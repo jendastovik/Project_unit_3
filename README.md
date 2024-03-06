@@ -37,10 +37,24 @@ I will design a graphical user interface application. This application will be r
 
 # Criteria B: Design
 ## System Diagram
+![System Diagram](diagrams/system_diagram.png)
+*Fig. 1 System Diagram of the app*
 ## Wireframe
+![Wireframe](diagrams/wireframe.jpg)
+*Fig. 2 wireframe diagram*
 ## Flow Diagram
+![Flow Diagram 1](diagrams/CreateItemScreen.create_item.png)
+*Fig. 3 Flow Diagram of the method crate_item of the CreateItemScreen class*
+![Flow Diagram 2](diagrams/DatabaseWorker.search.png)
+*Fig. 4 Flow Diagram of the method search of the DatabaseWorker class*
+![Flow Diagram 3](diagrams/ViewOrderScreen.delete_selected.png)
+*Fig. 5 Flow Diagram of the method delete_selected of the ViewOrderScreen class*
 ## ER Diagram
+![ER Diagram](diagrams/ER.png)
+*Fig. 6 ER Diagram of the database*
 ## UML Diagram
+![UML Diagram](diagrams/UML.png)
+*Fig. 7 UML Diagram of the classes*
 
 ## Record of Tasks
 | Task No. | Planned Action                                               | Planned Outcome                                                                                 | Time estimate (min) | Target completion date | Criteria |

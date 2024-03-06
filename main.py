@@ -104,7 +104,6 @@ class LoginScreen(MDScreen):
     def try_login(self):
         uname = self.ids.uname.text
         passwd = self.ids.passwd.text
-        print(self.ids.uname.text)
 
         user = main.x.search(f"SELECT * FROM employees WHERE username='{uname}' AND password='{passwd}'")
 
