@@ -27,9 +27,9 @@ Lastly, the preference for SQLite as the designated data storage solution, as op
 I will design a graphical user interface application. This application will be run locally on a computer and will allow users to do all mentioned tasks. All the data will be stored in also locally run database.
 
 ## Success Criteria
-1. Solution provides a way for the user of the software to track the inventory of materials
-2. Solution provides a way for the user to create an item sold by the company from the materials
-3. Solution provides a way to track orders and keep track of the budget
+1. Solution provides a way for the user to create an item sold by the company from different materials
+2. Solution provides a way to track transactions and keep track of the budget
+3. Solution provides a way for the user of the software to view and delete orders.
 4. Solution allows the user to sign in with a password and username and create new accounts for their employees
 5. Solution informs the user of the time and date of the last log-in
 6. Solution enables the user to create new distributors and customers, who can gather points based on which they get discounts
@@ -114,6 +114,7 @@ I will design a graphical user interface application. This application will be r
 | KivyMD     |
 | Requests   |
 | Json       |
+| sqlite3    |
 
 ## List Of Techniques Used
 1. Functions (To have control of every action and not repeating the same for different parts of the code)
@@ -125,4 +126,73 @@ I will design a graphical user interface application. This application will be r
 7. API (To get the data from the server and to send the data to the server)
 
 ## Development
+### Succes criteria 1: tracking orders
+```python
+# This code defines a class called ViewOrderScreen, which is a screen in the application.
+# It inherits from the MDScreen class.
+# The ViewOrderScreen class displays a table of orders with various columns such as id, disc_type, quantity, price, etc.
+# The table is implemented using the MDDataTable widget from the KivyMD library.
+# The class has methods to handle events such as row press and checkbox press.
+# It also provides functionality to delete selected rows or delete all rows from the table.
+class ViewOrderScreen(MDScreen):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.data_tables= None
+        self.selected_rows = []
 
+    def on_pre_enter(self, *args):
+        # Define the column names and their widths for the table
+        column_names= [("id", 30), ("disc_type", 40), ("quantity", 30), ("price", 30), ("employee_id", 40), ("color", 40), ("image", 40), ("customer_id", 30)]
+        
+        # Create an instance of MDDataTable with the specified column data
+        self.data_tables = MDDataTable(
+            size_hint=(0.9, 0.6),
+            pos_hint={'center_x': 0.5, 'center_y': 0.5},
+            use_pagination=True,
+            check=True,
+            column_data=column_names
+        )
+        
+        # Bind the row press and checkbox press events to their respective methods
+        self.data_tables.bind(on_row_press=self.row_pressed)
+        self.data_tables.bind(on_check_press=self.checkbox_pressed)
+        
+        # Add the MDDataTable widget to the screen
+        self.add_widget(self.data_tables)
+        
+        # Update the table with the latest data
+        self.update()
+
+    def update(self):
+        # Retrieve the order data from the database and update the table
+        data = main.x.search("""SELECT orders.id, discs.type, orders.quantity, orders.price, orders.employee_id, orders.color, orders.image, orders.customer_id FROM orders JOIN discs ON orders.disc_id = discs.id""", multiple=True)
+        self.data_tables.update_row_data(None, data)
+    
+    def checkbox_pressed(self, instance_table, current_row):
+        # Handle the checkbox press event
+        print(f"record checked {current_row}")
+        
+        # If the current row is already selected, remove it from the selected_rows list
+        # Otherwise, add it to the list
+        if current_row in self.selected_rows:
+            self.selected_rows.remove(current_row)
+        else:
+            self.selected_rows.append(current_row)
+
+    def row_pressed(self, instance_table, instance_row):
+        # Handle the row press event
+        print(f"value clicked {instance_row}")
+
+    def delete_selected(self):
+        # Delete the selected rows from the database and update the table
+        print(self.selected_rows)
+        for row in self.selected_rows:
+            main.x.run_query(f"DELETE FROM orders WHERE id={row[0]}")
+        self.update()
+
+    def delete_all(self):
+        # Delete all rows from the database and update the table
+        main.x.run_query("DELETE FROM orders")
+        self.update()
+```
+This code defines a class called ViewOrderScreen, which is a screen in the application. It inherits from the MDScreen class. The ViewOrderScreen class displays a table of orders with various columns such as id, disc_type, quantity, price, etc. The table is implemented using the MDDataTable widget from the KivyMD library. The class has methods to handle events such as row press and checkbox press. It also provides functionality to delete selected rows or delete all rows from the table.
