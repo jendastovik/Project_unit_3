@@ -173,8 +173,9 @@ ScreenManager:
         id: image_screen
         name: 'ImageScreen'
 ```
+This is a part of the main.kv file that defines the screen manager and the screens of the application. The screen manager is responsible for switching between the screens of the application. Each screen is defined by its name and id. The id is used to reference the screen in the main.py file. The name is used to switch between the screens in the main.py file. 
 
-The database is a separate file called database.db. THere are ```create_disc.sql``` and ```table_setUp.sql``` files that are responsible for creating the database and setting up the tables in the database. The database is connected to the main.py file through the ```DatabaseWorker``` class. This class is responsible for all the communication with the database. It has methods for creating, reading, updating and deleting data from the database.
+The database is a separate file called database.db. There are ```create_disc.sql``` and ```table_setUp.sql``` files that are responsible for creating the database and setting up the tables in the database. The database is connected to the main.py file through the ```DatabaseWorker``` class. This class is responsible for all the communication with the database. It has methods for creating, reading, updating and deleting data from the database.
 ```sql
 CREATE TABLE IF NOT EXISTS transactions (
   id INTEGER PRIMARY KEY,
@@ -223,24 +224,26 @@ def open_menu(self, drop_item_element):
     # Open the dropdown menu
     self.menu.open()
 ```
-It also has a method ```create_item``` that is called when the user presses the create button. This method gets the data from the input fields on the screen and sends it to the database. It also calculates the final price of the item based on the quantity and the price of the disc type. It also gets the image of the disc based on the region provided by the user. This is a part of the code that handles the 
+It also has a method ```create_item``` that is called when the user presses the create button. This method gets the data from the input fields on the screen and sends it to the database. It also calculates the final price of the item based on the quantity of the discs. It also gets the image of the disc based on the region provided by the user. This is a part of the code that handles the 
 ```python
-points = main.x.search(f"SELECT points FROM parties WHERE id={customer_id}")[0]
-price = 2500 * int(quantity)
-if points >= 100:
-    price -= 500
-    main.x.run_query(f"UPDATE parties SET points={0} WHERE id={customer_id}")
+points = main.x.search(f"SELECT points FROM parties WHERE id={customer_id}")[0]  # Get the current points of the customer from the database
+price = 2500 * int(quantity)  # Calculate the initial price based on the quantity of items
+
+if points >= 100:  # Check if the customer has enough points for a discount
+    price -= 500  # Apply a discount of 500 to the price
+    main.x.run_query(f"UPDATE parties SET points={0} WHERE id={customer_id}")  # Set the customer's points to 0 in the database
     self.dialog = MDDialog(
         text=f"You have used your points, your order is 500 cheaper. The final price is {price}",
         size_hint=(0.7, 0.3),
-    )
+    )  # Create a dialog to inform the customer about the discount
 else:
-    main.x.run_query(f"UPDATE parties SET points={points+10*int(quantity)} WHERE id={customer_id}")
+    main.x.run_query(f"UPDATE parties SET points={points+10*int(quantity)} WHERE id={customer_id}")  # Add points to the customer's account in the database
     self.dialog = MDDialog(
         text=f"You have earned {10*int(quantity)} points for your order. You can use your points for a discount in your next order. Now you have {points+10*int(quantity)} points. The price is {price}",
         size_hint=(0.7, 0.3),
-    )
-self.dialog.open()
+    )  # Create a dialog to inform the customer about the earned points
+
+self.dialog.open()  # Open the dialog to display the message to the customer
 ```
 ### Succes criteria 2: tracking transactions
 
