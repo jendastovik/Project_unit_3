@@ -224,7 +224,10 @@ def open_menu(self, drop_item_element):
     # Open the dropdown menu
     self.menu.open()
 ```
-It uses an instance of the ```DatabaseWorker``` class to get the data from the database which is saved as an attribute of the class ```main```.
+It uses an instance of the ```DatabaseWorker``` class to get the data from the database which is saved as an attribute of the class ```main``` called ```x```. Here is a code that handles initialization of the database:
+```python
+x =DatabaseWorker('database.db')
+```
 
 It also has a method ```create_item``` that is called when the user presses the create button. This method gets the data from the input fields on the screen and sends it to the database. It also calculates the final price of the item based on the quantity of the discs. It also gets the image of the disc based on the region provided by the user. This is a part of the code that handles the communication with the database:
 ```python
