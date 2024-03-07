@@ -114,12 +114,12 @@ I will design a graphical user interface application. This application will be r
 
 # Criteria C: Development
 ## Existing Tools
-| Software/Development Tool |
-|---------------------------|
-| Python                    |
-| VS Code                   |
-| KivyMD                    |
-| SQLite                    |
+| Software/Development Tool      |
+|--------------------------------|
+| Python                         |
+| VS Code                        |
+| KivyMD                         |
+| SQLite (reatlational database) |
 
 
 | Libraries  |
@@ -140,73 +140,118 @@ I will design a graphical user interface application. This application will be r
 7. API (To get the data from the server and to send the data to the server)
 
 ## Development
-### Succes criteria 1: tracking orders
-```python
-# This code defines a class called ViewOrderScreen, which is a screen in the application.
-# It inherits from the MDScreen class.
-# The ViewOrderScreen class displays a table of orders with various columns such as id, disc_type, quantity, price, etc.
-# The table is implemented using the MDDataTable widget from the KivyMD library.
-# The class has methods to handle events such as row press and checkbox press.
-# It also provides functionality to delete selected rows or delete all rows from the table.
-class ViewOrderScreen(MDScreen):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.data_tables= None
-        self.selected_rows = []
-
-    def on_pre_enter(self, *args):
-        # Define the column names and their widths for the table
-        column_names= [("id", 30), ("disc_type", 40), ("quantity", 30), ("price", 30), ("employee_id", 40), ("color", 40), ("image", 40), ("customer_id", 30)]
-        
-        # Create an instance of MDDataTable with the specified column data
-        self.data_tables = MDDataTable(
-            size_hint=(0.9, 0.6),
-            pos_hint={'center_x': 0.5, 'center_y': 0.5},
-            use_pagination=True,
-            check=True,
-            column_data=column_names
-        )
-        
-        # Bind the row press and checkbox press events to their respective methods
-        self.data_tables.bind(on_row_press=self.row_pressed)
-        self.data_tables.bind(on_check_press=self.checkbox_pressed)
-        
-        # Add the MDDataTable widget to the screen
-        self.add_widget(self.data_tables)
-        
-        # Update the table with the latest data
-        self.update()
-
-    def update(self):
-        # Retrieve the order data from the database and update the table
-        data = main.x.search("""SELECT orders.id, discs.type, orders.quantity, orders.price, orders.employee_id, orders.color, orders.image, orders.customer_id FROM orders JOIN discs ON orders.disc_id = discs.id""", multiple=True)
-        self.data_tables.update_row_data(None, data)
-    
-    def checkbox_pressed(self, instance_table, current_row):
-        # Handle the checkbox press event
-        print(f"record checked {current_row}")
-        
-        # If the current row is already selected, remove it from the selected_rows list
-        # Otherwise, add it to the list
-        if current_row in self.selected_rows:
-            self.selected_rows.remove(current_row)
-        else:
-            self.selected_rows.append(current_row)
-
-    def row_pressed(self, instance_table, instance_row):
-        # Handle the row press event
-        print(f"value clicked {instance_row}")
-
-    def delete_selected(self):
-        # Delete the selected rows from the database and update the table
-        print(self.selected_rows)
-        for row in self.selected_rows:
-            main.x.run_query(f"DELETE FROM orders WHERE id={row[0]}")
-        self.update()
-
-    def delete_all(self):
-        # Delete all rows from the database and update the table
-        main.x.run_query("DELETE FROM orders")
-        self.update()
+### Code organization and database connection
+The code is organized in a way that each screen of the application is a separate python class in the main.py file. Each one of these classes inherits from the ```MDScreen``` class from the KivyMD library. There is a class ```main``` that is the main class of the application which is a subclass of the ```MDApp``` class from the KivyMD library. The main class is responsible for running the application. KivyMD classes allow this code to connect to main.kv file which is responsible for the graphic interface of the application:
+```kv
+ScreenManager:
+    id: screen_manager
+    LoginScreen:
+        id: login_screen
+        name: 'LoginScreen'
+    HomeScreen:
+        id: home_screen
+        name: 'HomeScreen'
+    TableScreen:
+        id: table_screen
+        name: 'TableScreen'
+    AddCustomerScreen:
+        id: add_customer_screen
+        name: 'AddCustomerScreen'
+    RegistrationScreen:
+        id: registration_screen
+        name: 'RegistrationScreen'
+    CreateItemScreen:
+        id: create_item_screen
+        name: 'CreateItemScreen'
+    ViewOrderScreen:
+        id: view_order_screen
+        name: 'ViewOrderScreen'
+    ViewPartiesScreen:
+        id: view_parties_screen
+        name: 'ViewPartiesScreen'
+    ImageScreen:
+        id: image_screen
+        name: 'ImageScreen'
 ```
-This code defines a class called ViewOrderScreen, which is a screen in the application. It inherits from the MDScreen class. The ViewOrderScreen class displays a table of orders with various columns such as id, disc_type, quantity, price, etc. The table is implemented using the MDDataTable widget from the KivyMD library. The class has methods to handle events such as row press and checkbox press. It also provides functionality to delete selected rows or delete all rows from the table.
+
+The database is a separate file called database.db. THere are ```create_disc.sql``` and ```table_setUp.sql``` files that are responsible for creating the database and setting up the tables in the database. The database is connected to the main.py file through the ```DatabaseWorker``` class. This class is responsible for all the communication with the database. It has methods for creating, reading, updating and deleting data from the database.
+```sql
+CREATE TABLE IF NOT EXISTS transactions (
+  id INTEGER PRIMARY KEY,
+  sender_id INTEGER REFERENCES parties(id),
+  receiver_id INTEGER REFERENCES parties(id),
+  amount INTEGER,
+  signature TEXT,
+  employee_id INTEGER REFERENCES employee(id)
+);
+```
+
+This is an example of code that sets up the table transactions in the database. It creates a table with columns id, sender_id, receiver_id, amount, signature and employee_id. The sender_id, receiver_id and employee_id are foreign keys that reference the id column in the parties and employee tables. This is done to make sure that the data in the database is consistent and to avoid errors when deleting or updating data in the database.
+
+### Succes criteria 1: creating items
+Class ```CreateItemScreen``` is responsible for creating new items. It has methods to handle the events on the screen such as ```open_menu``` that is called when the user presses the menu button and shows custommers to choose from that it gets from the database.
+```python
+# This code defines a method called open_menu, which is used to open a dropdown menu.
+# The method takes two parameters: self (referring to the instance of the class) and drop_item_element (the dropdown menu element).
+def open_menu(self, drop_item_element):
+    # Query the database to get a list of users
+    users = main.x.search("SELECT first_name, last_name FROM parties", multiple=True)
+    
+    # Create a list of menu items by combining the first name and last name of each user
+    self.menu_items = [f"{user[0]} {user[1]}" for user in users]
+    
+    # Create a list to store the menu buttons
+    buttons_menu = []
+    
+    # Iterate over each menu item
+    for item in self.menu_items:
+        # Create a dictionary for each menu button with the following properties:
+        # - text: the menu item text
+        # - on_release: a lambda function that calls the button_pressed method with the menu item as an argument
+        # - viewclass: the class used to display the menu item (OneLineListItem)
+        buttons_menu.append(
+            {
+                "text": item,
+                "on_release": lambda x=item: self.button_pressed(x, drop_item_element),
+                "viewclass": "OneLineListItem",
+            }
+        )
+    
+    # Create an instance of MDDropdownMenu with the caller (drop_item_element) and the menu items
+    self.menu = MDDropdownMenu(caller=drop_item_element, items=buttons_menu, width_mult=2)
+    
+    # Open the dropdown menu
+    self.menu.open()
+```
+It also has a method ```create_item``` that is called when the user presses the create button. This method gets the data from the input fields on the screen and sends it to the database. It also calculates the final price of the item based on the quantity and the price of the disc type. It also gets the image of the disc based on the region provided by the user. This is a part of the code that handles the 
+```python
+points = main.x.search(f"SELECT points FROM parties WHERE id={customer_id}")[0]
+price = 2500 * int(quantity)
+if points >= 100:
+    price -= 500
+    main.x.run_query(f"UPDATE parties SET points={0} WHERE id={customer_id}")
+    self.dialog = MDDialog(
+        text=f"You have used your points, your order is 500 cheaper. The final price is {price}",
+        size_hint=(0.7, 0.3),
+    )
+else:
+    main.x.run_query(f"UPDATE parties SET points={points+10*int(quantity)} WHERE id={customer_id}")
+    self.dialog = MDDialog(
+        text=f"You have earned {10*int(quantity)} points for your order. You can use your points for a discount in your next order. Now you have {points+10*int(quantity)} points. The price is {price}",
+        size_hint=(0.7, 0.3),
+    )
+self.dialog.open()
+```
+### Succes criteria 2: tracking transactions
+
+### Succes criteria 3: tracking orders
+
+### Succes criteria 4: login and registration
+
+### Succes criteria 5: last log in
+
+### Succes criteria 6: customer and distributor management, point system
+
+### Succes criteria 7: image generation
+
+

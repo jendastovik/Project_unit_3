@@ -194,7 +194,7 @@ class CreateItemScreen(MDScreen):
                  }
             )
         self.menu = MDDropdownMenu(caller=drop_item_element, items=buttons_menu, width_mult=2)
-        self.menu.open()
+        self.menu.open()    
 
     def button_pressed(self, x, drop_item_element):
         first, last = x.split(" ")
@@ -235,13 +235,21 @@ class CreateItemScreen(MDScreen):
         type_id = main.x.search(f"SELECT id FROM discs WHERE type='{types}'")[0]
         quantity = self.ids.quantity.text
         points = main.x.search(f"SELECT points FROM parties WHERE id={customer_id}")[0]
-        price = 2500
+        price = 2500 * int(quantity)
         if points >= 100:
             price -= 500
-            main.x.run_query(f"UPDATE parties SET points={points-100} WHERE id={customer_id}")
+            main.x.run_query(f"UPDATE parties SET points={0} WHERE id={customer_id}")
+            self.dialog = MDDialog(
+                text=f"You have used your points, your order is 500 cheaper. The final price is {price}",
+                size_hint=(0.7, 0.3),
+            )
         else:
             main.x.run_query(f"UPDATE parties SET points={points+10*int(quantity)} WHERE id={customer_id}")
-
+            self.dialog = MDDialog(
+                text=f"You have earned {10*int(quantity)} points for your order. You can use your points for a discount in your next order. Now you have {points+10*int(quantity)} points. The price is {price}",
+                size_hint=(0.7, 0.3),
+            )
+        self.dialog.open()
         if zip_code:
             img_url = get_image(zip_code)
             main.x.insert(f"""INSERT INTO orders (disc_id, quantity, price, employee_id, color, image, customer_id) VALUES ({type_id}, {quantity}, {price}, {main.employee}, '{color}', '{img_url}', {customer_id})""")
