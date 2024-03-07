@@ -264,12 +264,134 @@ def delete_selected(self):
 ```
 
 ### Succes criteria 3: tracking orders
+```ViewOrderScreen``` class is responsible for tracking orders. Key function of this screen is to display table with all the orders and to allow user to delete them. A method responsible for crating the table is ```on_pre_enter``` and ```update```:
+```python
+def on_pre_enter(self, *args):
+    # Define the column names and their widths for the table
+    column_names= [("id", 30), ("disc_type", 40), ("quantity", 30), ("price", 30), ("employee_id", 40), ("color", 40), ("image", 40), ("customer_id", 30)]
+    
+    # Create an instance of MDDataTable with the specified column data
+    self.data_tables = MDDataTable(
+        size_hint=(0.9, 0.6),
+        pos_hint={'center_x': 0.5, 'center_y': 0.5},
+        use_pagination=True,
+        check=True,
+        column_data=column_names
+    )
+    
+    # Bind the row press and checkbox press events to their respective methods
+    self.data_tables.bind(on_row_press=self.row_pressed)
+    self.data_tables.bind(on_check_press=self.checkbox_pressed)
+    
+    # Add the MDDataTable widget to the screen
+    self.add_widget(self.data_tables)
+    
+    # Update the table with the latest data
+    self.update()
+```
+```python
+def update(self):
+    # Retrieve the order data from the database and update the table
+    data = main.x.search("""SELECT orders.id, discs.type, orders.quantity, orders.price, orders.employee_id, orders.color, orders.image, orders.customer_id FROM orders JOIN discs ON orders.disc_id = discs.id""", multiple=True)
+    self.data_tables.update_row_data(None, data)
+```
+It is interesting to notice that the table is created in the ```on_pre_enter``` method and then updated in the ```update``` method. This is done to make sure that the table is updated every time the user enters the screen. The table is created using the ```MDDataTable``` class from the KivyMD library.
 
 ### Succes criteria 4: login and registration
+Classes ```LoginScreen``` and ```RegistrationScreen``` are responsible for login and registration. Two key methods are ```try_login``` and ```register```:
+```python
+def try_login(self):
+    uname = self.ids.uname.text  # Get the username entered by the user
+    passwd = self.ids.passwd.text  # Get the password entered by the user
+
+    user = main.x.search(f"SELECT * FROM employees WHERE username='{uname}' AND password='{passwd}'")  # Search for a matching user in the database
+
+    if user:  # If a matching user is found
+        print(f"Last login is: {user[4]}")  # Print the last login time of the user
+        self.manager.get_screen("HomeScreen").ids.log.text = f"Last login is: {user[4]}"  # Update the last login label on the home screen
+        self.parent.current = "HomeScreen"  # Switch to the home screen
+        main.employee = user[0]  # Set the current employee ID to the logged-in user
+        self.dialog = MDDialog(
+            text="Login successful",
+            size_hint=(0.7, 0.3),
+        )  # Create a dialog to inform the user about the successful login
+        self.dialog.open()  # Open the dialog
+    else:  # If no matching user is found
+        self.dialog = MDDialog(
+            text="Invalid username or password",
+            size_hint=(0.7, 0.3),
+        )  # Create a dialog to inform the user about the invalid credentials
+        self.dialog.open()  # Open the dialog
+```
+This method gets username and password from the input fields on the screen and sends them to the database to check if the user exists. If the user exists, it logs the user in and switches to the home screen. If the user does not exist, it informs the user about the invalid credentials with a dialog.
+
+```python
+def try_register(self):
+    email = self.ids.email.text
+    pass1 = self.ids.pass1.text
+    pass2 = self.ids.pass2.text
+    uname = self.ids.uname.text
+    code = self.ids.code.text
+    
+    if len(pass1)<8:  # Checks if the length of pass1 is less than 8 characters
+        self.ids.pass1.error=True
+        self.ids.pass1.helper_text="Password must be at least 8 characters"
+    elif pass1!=pass2:  # Checks if pass1 is not equal to pass2
+        self.ids.pass2.error = True
+        self.ids.pass2.helper_text="Password does not match. Try again."
+    elif email.count("@")==0 or email.count(".")==0:  # Checks if email does not contain '@' or '.'
+        self.ids.email.error = True
+        self.ids.email.helper_text="Invalid email"
+    elif main.x.search(f"SELECT * FROM employees WHERE email='{email}'"):  # Checks if email already exists in the database
+        self.ids.email.error = True
+        self.ids.email.helper_text="Email already exists"
+    elif main.x.search(f"SELECT * FROM employees WHERE username='{uname}'"):  # Checks if username already exists in the database
+        self.ids.uname.error = True
+        self.ids.uname.helper_text="Username already exists"
+    elif len(uname)<4:  # Checks if the length of uname is less than 4 characters
+        self.ids.uname.error = True
+        self.ids.uname.helper_text="Username must be at least 4 characters"
+    elif code != "1234":  # Checks if code is not equal to "1234"
+        self.ids.code.error = True
+        self.ids.code.helper_text="Invalid code"
+    else:
+        # Registration successful
+        self.dialog = MDDialog(
+            text="Registration successful",
+            size_hint=(0.7, 0.3),
+        )
+        self.dialog.open()
+        
+        # Insert new employee into the database
+        main.x.insert(f"""INSERT INTO employees (email, password, username) VALUES ('{email}', '{pass1}', '{uname}')""")
+        
+        # Switch to the login screen
+        self.parent.current = "LoginScreen"
+```
+This method takes data from the input fields on the screen and checks if the data follows all the requirements. If the data is valid, it sends it to the database to be saved and informs the user about the successful registration with a dialog. If the data is not valid, it informs the user about the invalid using helper text on the input fields.
 
 ### Succes criteria 5: last log in
+First, the last login time of the user is saved in the database. This is done by adding a column last_login to the employees table in the database and updating the last_login column with the current time when the user registers.
+```sql
+CREATE TABLE IF NOT EXISTS employees (
+  id INTEGER PRIMARY KEY,
+  email TEXT,
+  password TEXT,
+  username TEXT,
+  last_login TEXT
+);
+```
+Second, the last login time of the user is displayed on the home screen after the user logs in. This is done by getting the last login time of the user from the database and updating the last login label on the home screen with the last login time.
+```python
+self.manager.get_screen("HomeScreen").ids.log.text = f"Last login is: {user[4]}"  # Update the last login label on the home screen
+```
+Last, the last login time of the user is updated in the database when the user logs out in the ```logout``` method of the ```HomeScreen``` class.
+```python
+main.x.run_query(f"UPDATE employees SET last_login=CURRENT_TIMESTAMP WHERE id={main.employee}")  # Update the last login time of the user in the database
+```
 
 ### Succes criteria 6: customer and distributor management, point system
+This is a part of the code from the ```CreateItemScreen``` class that is responsible for adding points to the customer's account based on the quantity of the discs ordered and applying a discount if the customer has enough points:
 ```python
 points = main.x.search(f"SELECT points FROM parties WHERE id={customer_id}")[0]  # Get the current points of the customer from the database
 price = 2500 * int(quantity)  # Calculate the initial price based on the quantity of items
@@ -290,7 +412,19 @@ else:
 
 self.dialog.open()  # Open the dialog to display the message to the customer
 ```
-This code from the ```CreateItemScreen``` class is responsible for adding points to the customer's account based on the quantity of the discs ordered. It also checks if the customer has enough points to get a discount and applies the discount if the customer has enough points. It also informs the customer about the discount or the earned points with a dialog.
 ### Succes criteria 7: image generation
-
+Function ```get_image``` is responsible for generating an image of the disc based on the region provided by the user. It uses the requests library to get the image from the internet and the json library to parse the response from the server. This function is called in the ```CreateItemScreen``` class when the user presses the create button. It gets the region from the input field on the screen and sends it to the ```get_image``` function.
+```python
+def get_image(zip):
+    # Send a POST request to the text2img API to generate an image based on the provided zip code
+    r = requests.post(
+        "https://api.deepai.org/api/text2img",
+        data={
+            'text': f'generate image that symbolises region {zip}',  # Specify the text to be used for generating the image
+        },
+        headers={'api-key': 'bcc7ea63-e693-4a60-98db-a179928d2f26'}  # Include the API key in the request headers
+    )
+    print(r.json())  # Print the JSON response from the API
+    return r.json()["output_url"]  # Return the URL of the generated image
+```
 
