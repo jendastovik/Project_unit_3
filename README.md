@@ -224,7 +224,52 @@ def open_menu(self, drop_item_element):
     # Open the dropdown menu
     self.menu.open()
 ```
-It also has a method ```create_item``` that is called when the user presses the create button. This method gets the data from the input fields on the screen and sends it to the database. It also calculates the final price of the item based on the quantity of the discs. It also gets the image of the disc based on the region provided by the user. This is a part of the code that handles the 
+It uses an instance of the ```DatabaseWorker``` class to get the data from the database which is saved as an attribute of the class ```main```.
+
+It also has a method ```create_item``` that is called when the user presses the create button. This method gets the data from the input fields on the screen and sends it to the database. It also calculates the final price of the item based on the quantity of the discs. It also gets the image of the disc based on the region provided by the user. This is a part of the code that handles the communication with the database:
+```python
+main.x.insert(f"""INSERT INTO orders (disc_id, quantity, price, employee_id, color, image, customer_id) VALUES ({type_id}, {quantity}, {price}, {main.employee}, '{color}', '{img_url}', {customer_id})""")
+```
+
+### Succes criteria 2: tracking transactions
+```TableScreen``` class is responsible for tracking transactions. It has methods to handle the events on the screen such as ```delete_selected``` that is called when the user presses the delete button. This method gets the selected transaction from the table on the screen and sends it to the database to be deleted. It also has a method ```delete_all``` that is called when the user presses the delete all button. This method gets all the transactions from the table on the screen and sends them to the database to be deleted. It also has a method ```summary``` that is called when the user presses the summary button. This method gets all the transactions from the database and calculates the balance, total spending and total income. 
+Here is a method ```summary```:
+```python
+def summary(self):
+    # Query the database to get the total income and outcome for the selected party (in this case, party with id=1)
+    income = main.x.search("SELECT SUM(amount) FROM transactions WHERE receiver_id=1")[0]
+    outcome = main.x.search("SELECT SUM(amount) FROM transactions WHERE sender_id=1")[0]
+    
+    # Check if the outcome or income is None (i.e., no transactions found)
+    if outcome == None:
+        outcome = 0
+    if income == None:
+        income = 0
+    
+    # Create a dialog box to display the balance, income, and outcome
+    self.dialog = MDDialog(
+        text=f"balance: {income - outcome}\nIncome: {income}\nOutcome: {outcome}",
+        size_hint=(0.7, 0.3),
+    )
+    self.dialog.open()
+```
+Here is a method ```delete_selected```:
+```python
+# Delete selected transactions from the database
+def delete_selected(self):
+    print(self.selected_rows)  # Print the selected rows for debugging purposes
+    for row in self.selected_rows:
+        main.x.run_query(f"DELETE FROM transactions WHERE id={row[0]}")  # Delete the transaction with the specified ID
+    self.update()  # Update the table to reflect the changes
+```
+
+### Succes criteria 3: tracking orders
+
+### Succes criteria 4: login and registration
+
+### Succes criteria 5: last log in
+
+### Succes criteria 6: customer and distributor management, point system
 ```python
 points = main.x.search(f"SELECT points FROM parties WHERE id={customer_id}")[0]  # Get the current points of the customer from the database
 price = 2500 * int(quantity)  # Calculate the initial price based on the quantity of items
@@ -245,16 +290,7 @@ else:
 
 self.dialog.open()  # Open the dialog to display the message to the customer
 ```
-### Succes criteria 2: tracking transactions
-
-### Succes criteria 3: tracking orders
-
-### Succes criteria 4: login and registration
-
-### Succes criteria 5: last log in
-
-### Succes criteria 6: customer and distributor management, point system
-
+This code from the ```CreateItemScreen``` class is responsible for adding points to the customer's account based on the quantity of the discs ordered. It also checks if the customer has enough points to get a discount and applies the discount if the customer has enough points. It also informs the customer about the discount or the earned points with a dialog.
 ### Succes criteria 7: image generation
 
 
