@@ -275,12 +275,6 @@ class HomeScreen(MDScreen):
         main.x.run_query(f"UPDATE employees SET last_login=CURRENT_TIMESTAMP WHERE id={main.employee}")
 
     
-# This code defines a class called ViewOrderScreen, which is a screen in the application.
-# It inherits from the MDScreen class.
-# The ViewOrderScreen class displays a table of orders with various columns such as id, disc_type, quantity, price, etc.
-# The table is implemented using the MDDataTable widget from the KivyMD library.
-# The class has methods to handle events such as row press and checkbox press.
-# It also provides functionality to delete selected rows or delete all rows from the table.
 class ViewOrderScreen(MDScreen):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
