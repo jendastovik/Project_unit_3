@@ -35,6 +35,12 @@ I will design a graphical user interface application. This application will be r
 6. Solution enables the user to create new distributors and customers, who can gather points based on which they get discounts
 7. While creating an item, Solution allows to add an image generated based on the name of the region provided
 
+## Aproval from the client
+![email to client](assets/email1.png)
+*Fig. 1 Email to the client*
+![email from client](assets/email2.png)
+*Fig. 2 Email from the client with aproval*
+
 # Criteria B: Design
 ## System Diagram
 ![System Diagram](diagrams/system_diagram.png)
