@@ -437,3 +437,7 @@ def get_image(zip):
     return r.json()["output_url"]  # Return the URL of the generated image
 ```
 
+## Video Demonstration
+Link to the video: [video](https://drive.google.com/file/d/1odVP4-mDSyv3gUt00e-NgQOjR8jOmYjO/view?usp=sharing)
+
+
